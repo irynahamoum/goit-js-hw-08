@@ -77,7 +77,7 @@ const img = images
 gallery.insertAdjacentHTML("afterbegin", img);
 
 function openModal(event) {
-  if (!(e.target.nodeName === "IMG" && event.target.dataset.source)) return;
+  if (!(event.target.nodeName === "IMG" && event.target.dataset.source)) return;
 
   console.log(event.target.dataset.source);
 
