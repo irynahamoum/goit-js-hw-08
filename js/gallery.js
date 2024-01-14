@@ -77,25 +77,28 @@ const img = images
 gallery.insertAdjacentHTML("afterbegin", img);
 
 function openModal(event) {
-  if (!(event.target.nodeName === "IMG" && event.target.dataset.source)) return;
+  event.preventDefault();
+  if (event.target.nodeName !== "IMG") return;
 
-  console.log(event.target.dataset.source);
+  const instanceContent = `<img src="${event.target.dataset.source}" alt="${event.target.alt} width="1112" height="640">`;
 
-  const instance = basicLightbox.create(
-    `<img src="${event.target.dataset.source}" alt="${event.target.alt}">`
-  );
+  const instance = basicLightbox.create(instanceContent, {
+    onShow: () => {
+      document.addEventListener("keydown", keyboardClose);
+    },
+
+    onClose: () => {
+      document.removeEventListener("keydown", keyboardClose);
+    },
+  });
 
   function keyboardClose(event) {
-    if (event.code !== "Escape") return;
-
-    instance.close(() => {
-      document.removeEventListener("keydown", keyboardClose);
-    });
+    if (event.code === "Escape") {
+      instance.close();
+    }
   }
 
-  instance.show(() => {
-    document.addEventListener("keydown", keyboardClose);
-  });
+  instance.show();
 }
 
 gallery.addEventListener("click", openModal);
